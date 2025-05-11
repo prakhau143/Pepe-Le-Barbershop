@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Pepe Le Barbershop</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Animate On Scroll Library -->
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #181818;
+      color: #fff;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+    /* Animated Background Image */
+    .bg-animate {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      z-index: -2;
+      background: url('https://images.pexels.com/photos/3992878/pexels-photo-3992878.jpeg?auto=compress&w=1200') center/cover no-repeat;
+      background-color: #222;
+      animation: kenburns 18s ease-in-out infinite alternate;
+      filter: brightness(0.75) blur(0.5px);
+    }
+    @keyframes kenburns {
+      0% { transform: scale(1) translateY(0);}
+      100% { transform: scale(1.1) translateY(-20px);}
+    }
+    /* Overlay with barber tools SVG floating */
+    .overlay-animate {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      z-index: -1;
+      pointer-events: none;
+      background: linear-gradient(120deg, rgba(30,30,30,0.28) 60%, rgba(0,0,0,0.55) 100%);
+      animation: fadeInOverlay 2.2s;
+    }
+    @keyframes fadeInOverlay {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .floating-tools, .floating-tools2 {
+      position: absolute;
+      pointer-events: none;
+      opacity: 0.15;
+      z-index: 0;
+    }
+    .floating-tools {
+      left: 10vw;
+      top: 60vh;
+      width: 90px;
+      height: 90px;
+      animation: floatTools 20s linear infinite alternate;
+    }
+    .floating-tools2 {
+      right: 12vw;
+      top: 25vh;
+      width: 70px;
+      height: 70px;
+      animation: floatTools2 22s linear infinite alternate;
+    }
+    @keyframes floatTools {
+      0% { transform: translateY(0) rotate(-8deg);}
+      100% { transform: translateY(-120px) rotate(12deg);}
+    }
+    @keyframes floatTools2 {
+      0% { transform: translateY(0) rotate(8deg);}
+      100% { transform: translateY(90px) rotate(-14deg);}
+    }
+    /* Parallax Hero */
+    .hero {
+      position: relative;
+      min-height: 400px;
+      background: url('https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat fixed;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+      z-index: 1;
+    }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(20,20,20,0.6);
+      z-index: 1;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      color: #fff;
+      padding: 2rem 1rem;
+      animation: fadeInDown 1.2s cubic-bezier(.6,.2,.1,1);
+    }
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-60px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+    .logo-img {
+      width: 90px; height: 90px;
+      border-radius: 50%;
+      border: 3px solid #fff;
+      margin-bottom: 1rem;
+      box-shadow: 0 4px 18px rgba(0,0,0,0.18);
+      background: #fff;
+      animation: bounceIn 1.2s;
+    }
+    @keyframes bounceIn {
+      0% { transform: scale(0.7);}
+      60% { transform: scale(1.1);}
+      100% { transform: scale(1);}
+    }
+    h1 {
+      font-size: 2.8rem;
+      letter-spacing: 1.5px;
+      background: linear-gradient(90deg, #f5d020 0%, #f53803 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 800;
+      text-shadow: 0 1px 8px #0009;
+    }
+    .barber-pole {
+      margin: 1.5rem auto 0.5rem auto;
+      width: 64px; height: 220px;
+      position: relative;
+      animation: fadeInBarber 1.7s cubic-bezier(.6,.2,.1,1);
+    }
+    @keyframes fadeInBarber {
+      from { opacity: 0; transform: scale(0.7);}
+      to { opacity: 1; transform: scale(1);}
+    }
+    .barber-pole-body {
+      width: 40px; height: 140px; margin: 0 auto;
+      border-radius: 22px;
+      background: repeating-linear-gradient(
+        -45deg, #fff 0 12px, #e74c3c 12px 24px, #3498db 24px 36px
+      );
+      background-size: 36px 36px;
+      animation: barberpole 1.5s linear infinite;
+      box-shadow: 0 2px 8px #0007;
+    }
+    @keyframes barberpole {
+      0% { background-position: 0 0; }
+      100% { background-position: 36px 36px; }
+    }
+    .barber-cap, .barber-base {
+      width: 56px; height: 16px;
+      background: #fff;
+      border-radius: 10px 10px 10px 10px/18px 18px 8px 8px;
+      margin: 0 auto;
+      box-shadow: 0 2px 6px #0003;
+    }
+    .barber-cap { margin-bottom: 2px;}
+    .barber-base { margin-top: 2px;}
+    /* Animated Buttons */
+    .cta-buttons {
+      display: flex; gap: 1rem; margin: 2em auto 1em auto; justify-content: center; flex-wrap: wrap;
+    }
+    .cta-buttons a, .book-now-btn {
+      background: linear-gradient(90deg,#f53803 0%,#f5d020 100%);
+      color: #181818; text-decoration: none; padding: 1em 2em;
+      border-radius: 12px; font-weight: bold; font-size: 1.1em;
+      box-shadow: 0 2px 12px #0002;
+      transition: transform 0.2s, box-shadow 0.2s, color 0.2s;
+      position: relative; overflow: hidden; z-index: 1;
+      animation: pulse 2s infinite;
+      margin-bottom: 0.5em;
+      display: inline-block;
+    }
+    @keyframes pulse {
+      0%,100% { box-shadow: 0 0 0 0 #f5d02044; }
+      70% { box-shadow: 0 0 0 10px #f5d02022; }
+    }
+    .cta-buttons a:hover, .book-now-btn:hover {
+      transform: scale(1.05);
+      color: #fff;
+      box-shadow: 0 4px 20px #f5d02044;
+    }
+    .book-now-btn {
+      margin-left: 0.5em;
+      background: linear-gradient(90deg,#f5d020 0%,#f53803 100%);
+      color: #fff;
+      font-size: 1.15em;
+      letter-spacing: 1.2px;
+      border-radius: 14px;
+      animation: bookBtnPulse 2s infinite;
+    }
+    @keyframes bookBtnPulse {
+      0%,100% { box-shadow: 0 0 0 0 #f5d02055; }
+      70% { box-shadow: 0 0 0 12px #f5d02022; }
+    }
+    /* Map Section with Animated Background */
+    .map-section {
+      position: relative;
+      overflow: hidden;
+      max-width: 900px;
+      margin: 2.5rem auto;
+      border-radius: 18px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.16);
+      background: rgba(34,34,34,0.88);
+      padding: 2rem 1rem 2rem 1rem;
+      z-index: 2;
+    }
+    .map-animated-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+    .map-bg-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.55) blur(2px);
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      animation: kenburns-map 20s ease-in-out infinite alternate;
+    }
+    @keyframes kenburns-map {
+      0% { transform: scale(1) translateY(0);}
+      100% { transform: scale(1.08) translateY(-18px);}
+    }
+    .floating-svg {
+      position: absolute;
+      pointer-events: none;
+      opacity: 0.15;
+      z-index: 2;
+    }
+    .scissors {
+      left: 8vw; top: 60%; width: 70px; height: 70px;
+      animation: float1 16s linear infinite alternate;
+    }
+    .comb {
+      right: 10vw; top: 18%; width: 60px; height: 60px;
+      animation: float2 20s linear infinite alternate;
+    }
+    .razor {
+      left: 40vw; top: 8%; width: 50px; height: 50px;
+      animation: float3 18s linear infinite alternate;
+    }
+    @keyframes float1 {
+      0% { transform: translateY(0) rotate(-10deg);}
+      100% { transform: translateY(-80px) rotate(20deg);}
+    }
+    @keyframes float2 {
+      0% { transform: translateY(0) rotate(8deg);}
+      100% { transform: translateY(60px) rotate(-18deg);}
+    }
+    @keyframes float3 {
+      0% { transform: translateY(0) rotate(-5deg);}
+      100% { transform: translateY(70px) rotate(12deg);}
+    }
+    .map-section > *:not(.map-animated-bg) {
+      position: relative;
+      z-index: 3;
+    }
+    .map-title {
+      font-size: 1.5rem;
+      color: #f5d020;
+      margin-bottom: 1em;
+      background: linear-gradient(90deg,#f5d020 0%,#f53803 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .map-row {
+      display: flex;
+      gap: 2rem;
+      align-items: flex-start;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .map-container {
+      flex: 2 1 340px;
+      min-width: 280px;
+      max-width: 600px;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 2px 18px #0005;
+      background: #222b;
+    }
+    .map-container iframe {
+      width: 100%;
+      height: 340px;
+      border: 0;
+      border-radius: 14px;
+      display: block;
+    }
+    .map-cta {
+      flex: 1 1 220px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      margin-top: 1.2rem;
+    }
+    .map-cta .book-now-btn {
+      margin: 0;
+      width: 100%;
+      max-width: 220px;
+      font-size: 1.15em;
+      padding: 1em 0;
+    }
+    .map-cta p {
+      color: #fff;
+      margin: 1.5em 0 0 0;
+      font-size: 1.1em;
+      background: rgba(0,0,0,0.18);
+      border-radius: 10px;
+      padding: 1em;
+      box-shadow: 0 2px 8px #0002;
+    }
+    /* Gallery Slider */
+    .gallery-section {
+      max-width: 1000px;
+      margin: 3rem auto 2rem auto;
+      padding: 2rem 1rem;
+      background: rgba(34, 34, 34, 0.85);
+      border-radius: 18px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.16);
+      position: relative;
+      overflow: hidden;
+    }
+    .gallery-title {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+      color: #f5d020;
+      background: linear-gradient(90deg,#f5d020 0%,#f53803 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .slider {
+      display: flex;
+      transition: transform 0.6s cubic-bezier(.7,.2,.1,1);
+      will-change: transform;
+    }
+    .gallery-item {
+      min-width: 220px;
+      margin: 0 1rem;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 2px 16px #0003;
+      background: #222;
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+    .gallery-item img {
+      width: 100%; height: 220px; object-fit: cover;
+      display: block;
+      filter: grayscale(40%) brightness(0.96) contrast(1.08);
+      transition: filter 0.4s, transform 0.4s;
+    }
+    .gallery-item:hover img {
+      filter: grayscale(0%) brightness(1.08) contrast(1.12);
+      transform: scale(1.08) rotate(-1deg);
+    }
+    .caption {
+      position: absolute; bottom: 0; left: 0; width: 100%;
+      background: linear-gradient(0deg, rgba(34,34,34,0.92) 70%, rgba(34,34,34,0.1) 100%);
+      color: #fff; padding: 0.7em 0.5em; font-size: 1.07em;
+      font-weight: bold; letter-spacing: 0.5px; text-align: center;
+      opacity: 0.96; transition: background 0.2s;
+    }
+    .gallery-item:hover .caption {
+      background: linear-gradient(0deg,#f53803cc 70%,rgba(34,34,34,0.05) 100%);
+      color: #f5d020;
+    }
+    .slider-controls {
+      display: flex; justify-content: center; gap: 1.5rem; margin-top: 1rem;
+    }
+    .slider-btn {
+      background: #f5d020;
+      color: #181818;
+      border: none;
+      border-radius: 50%;
+      width: 38px; height: 38px;
+      font-size: 1.5em;
+      cursor: pointer;
+      box-shadow: 0 2px 8px #0006;
+      transition: background 0.2s, color 0.2s;
+    }
+    .slider-btn:hover { background: #f53803; color: #fff;}
+    /* Responsive */
+    @media (max-width: 900px) {
+      .map-row { flex-direction: column; gap: 1.5rem;}
+      .map-container, .map-cta { max-width: 100%; }
+    }
+    @media (max-width: 700px) {
+      .floating-svg, .floating-tools, .floating-tools2 { display: none; }
+      .map-section { padding: 1rem 0.5rem;}
+      .map-title { font-size: 1.1rem;}
+      .gallery-section { padding: 1rem 0.2rem;}
+      h1 { font-size: 1.3rem;}
+    }
+    /* Footer */
+    .footer {
+      text-align:center;
+      color:#888;
+      font-size:1rem;
+      padding:1.5em 0 0.5em 0;
+      background:transparent;
+      letter-spacing:1px;
+      text-shadow:0 1px 4px #000c;
+    }
+  </style>
+</head>
+<body>
+  <!-- Animated Background and Overlay -->
+  <div class="bg-animate"></div>
+  <div class="overlay-animate">
+    <!-- Floating SVG barber tools (scissors and comb) -->
+    <svg class="floating-tools" viewBox="0 0 64 64">
+      <g>
+        <rect x="28" y="10" width="8" height="44" rx="4" fill="#fff8e1" stroke="#c7a008" stroke-width="2"/>
+        <rect x="20" y="18" width="24" height="8" rx="4" fill="#f53803" stroke="#fff" stroke-width="1.5"/>
+        <rect x="20" y="38" width="24" height="8" rx="4" fill="#3498db" stroke="#fff" stroke-width="1.5"/>
+      </g>
+    </svg>
+    <svg class="floating-tools2" viewBox="0 0 64 64">
+      <g>
+        <rect x="18" y="12" width="6" height="40" rx="3" fill="#f5d020" stroke="#c7a008" stroke-width="2"/>
+        <rect x="40" y="12" width="6" height="40" rx="3" fill="#f5d020" stroke="#c7a008" stroke-width="2"/>
+        <ellipse cx="32" cy="54" rx="12" ry="4" fill="#fff8e1" stroke="#c7a008" stroke-width="1.5"/>
+      </g>
+    </svg>
+  </div>
+  <!-- Parallax Hero with Animated Elements -->
+  <div class="hero">
+    <div class="hero-overlay"></div>
+    <div class="hero-content" data-aos="fade-down">
+      <img src="https://lh3.googleusercontent.com/gps-cs-s/AC9h4nqg6yWQVyf5OC0RtXx1CXfbUyVYQYBFDLOuSbHdoJkM9CdcGQvPTPvrPJjaiFTwbcvGJ5F3BBTQK_xCg1a0BneyZYSBKnG8u_MW1JF7g_IJtNNJAbqK4ravkgZWOmnmnPRgTrroNA=w114-h114-n-k-no" alt="Pepe Le Barbershop Logo" class="logo-img">
+      <h1>Pepe Le Barbershop</h1>
+      <div class="barber-pole" data-aos="zoom-in" data-aos-delay="200">
+        <div class="barber-cap"></div>
+        <div class="barber-pole-body"></div>
+        <div class="barber-base"></div>
+      </div>
+      <div style="margin-top:1em;">
+        <span style="color:#ffd700;font-size:1.2em;">⭐ 4.9</span>
+        <span style="color:#4caf50;font-weight:bold;">&nbsp;Open · Closes 8 pm</span>
+      </div>
+      <div style="margin-top:0.4em;">Barber Shop · Denton, TX</div>
+    </div>
+  </div>
+  <!-- Info Section with Scroll Animations -->
+  <main style="max-width:700px;margin:2rem auto;background:rgba(255,255,255,0.07);padding:2rem 1.5rem;border-radius:20px;box-shadow:0 8px 40px rgba(0,0,0,0.13);backdrop-filter:blur(6px);" data-aos="fade-up">
+    <ul style="list-style:none;padding:0;margin:1em 0 2em 0;">
+      <li><strong>Address:</strong> 721 S Elm St #105, Denton, TX 76201, United States</li>
+      <li><strong>Phone:</strong> <a href="tel:+19402084770" style="color:#f5d020;">+1 940-208-4770</a></li>
+      <li><strong>Services:</strong> On-site services</li>
+      <li><strong>Review Count:</strong> 141+ reviews</li>
+    </ul>
+    <div style="background:linear-gradient(90deg,#232526 0%,#414345 100%);padding:1.3em 1em;border-radius:12px;margin-bottom:2em;box-shadow:0 2px 14px #0002;">
+      <h2 style="margin-top:0;font-size:1.3em;background:linear-gradient(90deg,#f5d020 0%,#f53803 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:bold;">Our Services</h2>
+      <ul style="margin:0.6em 0 0 0;padding:0 0 0 1.2em;">
+        <li>Haircuts for all ages</li>
+        <li>Beard trims & shaves</li>
+        <li>On-site grooming</li>
+        <li>Walk-ins & appointments welcome</li>
+      </ul>
+    </div>
+    <div style="font-size:1.09rem;margin-bottom:0.5em;color:#f3f3f3;background:rgba(50,50,50,0.18);border-radius:8px;padding:1em;box-shadow:0 2px 8px #0002;">
+      <strong>Visit Us:</strong><br>
+      721 S Elm St #105,<br>
+      Denton, TX 76201, United States
+    </div>
+  </main>
+  <!-- Animated Call-to-Action Buttons -->
+  <div class="cta-buttons" data-aos="fade-up">
+    <a href="https://www.pepelebarbershop.com/" target="_blank">Website</a>
+    <a href="https://maps.google.com/maps?um=1&fb=1&gl=in&sa=X&geocode=Kc_yq-KTy02GMZtG32K9U14J&daddr=721+S+Elm+St+%23105,+Denton,+TX+76201,+United+States&ved=2ahUKEwjN076ZsoCNAxVX0oQAHdHkIAMQ48ADegUIABCNAQ" target="_blank">Directions</a>
+    <a href="tel:+19402084770">Call</a>
+    <a href="https://www.pepelebarbershop.com/book" target="_blank" class="book-now-btn">Book Now</a>
+  </div>
+  <!-- Gallery Section -->
+  <section class="gallery-section" data-aos="fade-up" data-aos-delay="100">
+    <h2 class="gallery-title">Popular Haircut Styles</h2>
+    <div class="slider" id="slider">
+      <div class="gallery-item"><img src="https://wellgroomedgentleman.com/wp-content/uploads/How-to-Style-a-Crew-Cut-Tips-from-the-Pros-1-819x1024.jpg" alt="Crew Cut"><div class="caption">Crew Cut</div></div>
+      <div class="gallery-item"><img src="https://accessglobal.media.clients.ellingtoncms.com/uploads/froala_editor/images/How%20to%20Maintain%20a%20Low%20Taper%20Fade%20Haircut.png" alt="Fade"><div class="caption">Fade</div></div>
+      <div class="gallery-item"><img src="https://i.pinimg.com/474x/7e/60/11/7e6011080322f5b721c8fc2a04cb8529.jpg" alt="Buzz Cut"><div class="caption">Buzz Cut</div></div>
+      <div class="gallery-item"><img src="https://i.pinimg.com/564x/4d/e1/9b/4de19b1d57e5f036fee8cc09d9221687.jpg" alt="Faux Hawk"><div class="caption">Faux Hawk</div></div>
+      <div class="gallery-item"><img src="https://manofmany.com/wp-content/uploads/2017/08/10-Faux-Hawk-Haircuts-Hairstyles-for-Men.jpg" alt="Slicked Back Undercut"><div class="caption">Slicked Back Undercut</div></div>
+      <div class="gallery-item"><img src="https://usercontent.one/wp/manforhimself.com/wp-content/uploads/2020/04/mens-skin-fade-textured-crop-how-to-hairstyle-ben-vowles-man-for-himself-mfh7-1.jpg" alt="Short Quiff"><div class="caption">Short Quiff</div></div>
+      <div class="gallery-item"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRf_H5oM04tcBXU3hZ5cOsIZxbDZQopeJk-eQ&s" alt="Textured Crop Top Fade"><div class="caption">Textured Crop Top Fade</div></div>
+      <div class="gallery-item"><img src="https://content.latest-hairstyles.com/wp-content/uploads/barber-approved-1950s-quiff-style.jpg" alt="Caesar Cut"><div class="caption">Caesar Cut</div></div>
+    </div>
+    <div class="slider-controls">
+      <button class="slider-btn" onclick="slide(-1)">&#8592;</button>
+      <button class="slider-btn" onclick="slide(1)">&#8594;</button>
+    </div>
+  </section>
+  <!-- MAP SECTION WITH ANIMATED FLOATING BACKGROUND -->
+  <section class="map-section" data-aos="fade-up">
+    <div class="map-animated-bg">
+      <img src="https://images.pexels.com/photos/3992878/pexels-photo-3992878.jpeg?auto=compress&w=1200"
+           alt="Barbershop background" class="map-bg-img" />
+      <!-- Floating SVGs -->
+      <svg class="floating-svg scissors" viewBox="0 0 64 64">
+        <g>
+          <ellipse cx="18" cy="48" rx="10" ry="16" fill="#fff" stroke="#c7a008" stroke-width="3"/>
+          <ellipse cx="46" cy="48" rx="10" ry="16" fill="#fff" stroke="#c7a008" stroke-width="3"/>
+          <rect x="27" y="16" width="10" height="32" rx="4" fill="#f53803" stroke="#fff" stroke-width="2"/>
+          <rect x="32" y="8" width="2" height="18" rx="1" fill="#3498db"/>
+        </g>
+      </svg>
+      <svg class="floating-svg comb" viewBox="0 0 64 64">
+        <g>
+          <rect x="10" y="28" width="44" height="8" rx="4" fill="#f5d020" stroke="#c7a008" stroke-width="2"/>
+          <rect x="12" y="24" width="2" height="16" rx="1" fill="#fff"/>
+          <rect x="18" y="24" width="2" height="16" rx="1" fill="#fff"/>
+          <rect x="24" y="24" width="2" height="16" rx="1" fill="#fff"/>
+          <rect x="30" y="24" width="2" height="16" rx="1" fill="#fff"/>
+          <rect x="36" y="24" width="2" height="16" rx="1" fill="#fff"/>
+          <rect x="42" y="24" width="2" height="16" rx="1" fill="#fff"/>
+          <rect x="48" y="24" width="2" height="16" rx="1" fill="#fff"/>
+        </g>
+      </svg>
+      <svg class="floating-svg razor" viewBox="0 0 64 64">
+        <g>
+          <rect x="22" y="18" width="20" height="8" rx="2" fill="#fff8e1" stroke="#c7a008" stroke-width="2"/>
+          <rect x="28" y="26" width="8" height="20" rx="3" fill="#f53803" stroke="#fff" stroke-width="2"/>
+          <rect x="30" y="46" width="4" height="8" rx="2" fill="#3498db"/>
+        </g>
+      </svg>
+    </div>
+    <h2 class="map-title">Find Us on the Map</h2>
+    <div class="map-row">
+      <div class="map-container">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3342.553498942065!2d-97.13703768481967!3d33.207775580849204!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x864db531d9a8f7d3%3A0x2e3f1f2a7b2f7e5a!2s721%20S%20Elm%20St%20%23105%2C%20Denton%2C%20TX%2076201%2C%20USA!5e0!3m2!1sen!2sin!4v1715432100000!5m2!1sen!2sin"
+          allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+      <div class="map-cta">
+        <a href="https://www.pepelebarbershop.com/book" target="_blank" class="book-now-btn">Book an Appointment</a>
+        <p>
+          <strong>Address:</strong><br>
+          721 S Elm St #105,<br>
+          Denton, TX 76201, United States<br>
+          <strong>Phone:</strong> <a href="tel:+19402084770" style="color:#f5d020;">+1 940-208-4770</a>
+        </p>
+      </div>
+    </div>
+  </section>
+  <div class="footer">
+    &copy; 2025 Pepe Le Barbershop. All rights reserved.
+  </div>
+  <!-- Animate On Scroll JS -->
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    AOS.init({ once: true, duration: 900, offset: 120 });
+    // Simple gallery slider
+    let position = 0;
+    const slider = document.getElementById('slider');
+    const items = slider.children.length;
+    function slide(dir) {
+      position += dir;
+      if (position < 0) position = 0;
+      if (position > items - 4) position = items - 4;
+      slider.style.transform = `translateX(${-position * 240}px)`;
+    }
+    window.addEventListener('resize', function() {
+      if(window.innerWidth < 900) {
+        slider.style.transform = `translateX(${-position * 170}px)`;
+      } else {
+        slider.style.transform = `translateX(${-position * 240}px)`;
+      }
+    });
+  </script>
+</body>
+</html>
